@@ -4,6 +4,11 @@ from flask_restx import Api, Resource, fields, Namespace
 from PIL import Image
 from io import BytesIO
 import base64
+from flask_injector import inject
+from injector import Module, Binder, singleton, Injector
+
+from core.domain.services.iface_compare_service import IFaceCompareService
+
 
 api = Namespace(
     'Image Compare', description='Comparação de duas imagens de faces por semelhança')
@@ -14,16 +19,22 @@ baseCompare = api.model('BaseCompare', {
 })
 
 result = api.model('Result', {
-    'code': fields.String,
+    'match': fields.boolean,
     'score': fields.Float,
 })
 
 @api.route('/images', endpoint='v1',  methods=["POST"])
 class ImageResource(Resource):
+    @inject
+    def __init__(self, face_compare_service: IFaceCompareService, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.face_compare_service = face_compare_service
+
     @api.doc(body=baseCompare)
     @api.response(200, 'Success', result)
     def post(self):
         data = request.json
         # imgOne = Image.open(BytesIO(base64.b64decode(request.form['image_one'])))
         # imgTwo = Image.open(BytesIO(base64.b64decode(request.form['image_one'])))
-        return jsonify({'code': 'success', 'score': 99.9})
+        result =  self.face_compare_service.handle(data['image_one'], data['image_one'])
+        return jsonify({'match': result, 'score': 0.6})
