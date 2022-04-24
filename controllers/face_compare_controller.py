@@ -1,5 +1,5 @@
 
-from flask import Flask, Response, request, jsonify
+from flask import Flask, Response, request, jsonify, render_template
 from flask_restx import Api, Resource, fields, Namespace
 from PIL import Image
 from io import BytesIO
@@ -19,8 +19,9 @@ baseCompare = api.model('BaseCompare', {
 })
 
 result = api.model('Result', {
-    'match': fields.boolean,
-    'score': fields.Float,
+    'match': fields.Boolean(required=True, description='Indicador que essas imagens são da mesma pessoa ou não'),
+    'threshold': fields.String(required=True, description='Valor usado para determinar se eles são a mesma pessoa ou não.'),
+    'distance': fields.String(required=True, description='A distância entre duas imagens em relação ao threshold')
 })
 
 @api.route('/images', endpoint='v1',  methods=["POST"])
@@ -34,7 +35,10 @@ class ImageResource(Resource):
     @api.response(200, 'Success', result)
     def post(self):
         data = request.json
-        # imgOne = Image.open(BytesIO(base64.b64decode(request.form['image_one'])))
-        # imgTwo = Image.open(BytesIO(base64.b64decode(request.form['image_one'])))
-        result =  self.face_compare_service.handle(data['image_one'], data['image_one'])
+        result =  self.face_compare_service.handle(data['image_one'], data['image_two'])
         return jsonify({'match': result, 'score': 0.6})
+        
+    @api.errorhandler
+    def default_error_handler(error):
+        '''Default error handler'''
+        return {'message': str(error)}, getattr(error, 'code', 500)

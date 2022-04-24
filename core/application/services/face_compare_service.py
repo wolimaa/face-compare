@@ -1,5 +1,6 @@
 import io
 import cv2
+import numpy as np
 import base64
 import face_recognition
 from PIL import Image
@@ -7,6 +8,10 @@ from flask_injector import inject
 from injector import Module, Binder, singleton, Injector
 from interface import implements, Interface
 from core.domain.services.iface_compare_service import IFaceCompareService
+from core.utils.images import get_face
+from core.utils.model import facenet_model, img_to_encoding
+
+model = facenet_model(input_shape=(3, 96, 96))
 
 
 class FaceCompareService(implements(IFaceCompareService)):
@@ -14,24 +19,40 @@ class FaceCompareService(implements(IFaceCompareService)):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
             
-    def handle(self, image_one, image_two):
-        imageOne = Image.open(io.BytesIO(base64.b64decode(str('image_one'))))
-        imageTwo = Image.open(io.BytesIO(base64.b64decode(str('image_two'))))
+    def handle(self, code_image_one, code_image_two):
+        image_one = self.data_uri_to_cv2_img(code_image_one)
+        image_two = self.data_uri_to_cv2_img(code_image_two)
+        return self.process(image_one, image_two)
 
-        # bgrImgOne = cv2.imread(imageOne)
+    def process(self, image_one, image_two):
+        match = False
+        # Load images
+        face_one = get_face(image_one)
+        face_two = get_face(image_two)
 
-        rgbImgOne = cv2.cvtColor(imageOne, cv2.COLOR_BGR2RGB)
-        rgbImgTwo = cv2.cvtColor(imageTwo, cv2.COLOR_BGR2RGB)
+        # Calculate embedding vectors
+        embedding_one = img_to_encoding(face_one, model)
+        embedding_two = img_to_encoding(face_two, model)
 
-        print("  + Tamanho da imagem principal: {}".format(rgbImgOne.shape))
-        print("  + Tamanho da imagem secundaria: {}".format(rgbImgTwo.shape))
-
-        imgOne = face_recognition.load_image_file(rgbImgOne)
-        imgOneFaceEncoding = face_recognition.face_encodings(imgOne)[0]
+        dist = np.linalg.norm(embedding_one - embedding_two)
+        print(f'Distance between two images is {dist}')
+        if dist > 0.7:
+            match = False
+        else:
+            match = True
         
-        imgTwo = face_recognition.load_image_file(rgbImgTwo)
-        imgTwoFaceEncoding = face_recognition.face_encodings(imgTwo)[0]
+        return match
 
-        results = face_recognition.compare_faces([imgOneFaceEncoding], imgTwoFaceEncoding)
-        
-        return results
+    def data_uri_to_cv2_img(self, uri):
+
+
+        image = uri.split(',')[1]
+        decoded_data = base64.b64decode(image)
+        np_data = np.fromstring(decoded_data,np.uint8)
+        img = cv2.imdecode(np_data,cv2.IMREAD_UNCHANGED)
+
+
+
+        # nparr = np.fromstring(encoded_data.decode('base64'), np.uint8)
+        # img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        return img

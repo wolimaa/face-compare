@@ -29,7 +29,7 @@ class AppModule(Module):
                     to=FaceCompareService(), scope=singleton)
         binder.bind(Cache, to=Cache(app), scope=singleton)
         binder.bind(Api, to=api)
-
+    
 def startup(params):
     # app.config.from_object(params)
     logging.basicConfig(filename='logging.conf', level=logging.DEBUG)

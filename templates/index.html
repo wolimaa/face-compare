@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3schools30.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-utf8-base64/0.0.5/angular-utf8-base64.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="../static/component.js"></script>
+</head>
+
+<body ng-app="app">
+    <div class="w3-col l10 m12" id="main">
+        <form autocomplete="off" id="w3-exerciseform" action="exercise.asp?filename=exercise_display_visibility1"
+            method="post" target="_blank">
+            <h2>Test Face Compare</h2>
+            <div class="exercisewindow">
+                <h2>Galeria:</h2>
+                <p>Escolha duas imagens para comparação.</p>
+                <div id="preview"></div>
+                <input type="file" select-files-ng ng-model="fileArray" multiple id="file-input"
+                    class="w3-btn w3-margin-bottom">
+
+            </div>
+            <br>
+            <p>
+            <div ng-app="postserviceApp" ng-controller="postserviceCtrl">
+                <div>
+                    <input type="button" value="Comparar" ng-click="postdata()" /> <br /><br />
+                </div>
+                <div class="w3-code notranslate cssHigh"><span class="cssselectorcolor" style="color:brown">
+                        <div class="w3-padding w3-padding-16 w3-white notranslate">
+                            <span class="cssselectorcolor" style="color:brown">
+                                Resultado <span class="cssselectorcolor" style="color:brown"></span>
+                                <pre id="json"></pre>
+                            </span>
+                        </div>
+                </div>
+
+            </div>
+            </p>
+    </div>
+    </form>
+    </div>
+</body>
+</html>
