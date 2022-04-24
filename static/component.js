@@ -33,7 +33,7 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
         "hideEasing": "linear",
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
-      }
+    }
 
     $('#file-input').on("change", previewImages);
 
@@ -72,9 +72,13 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
 
     }
 
-
+    function formatTiming(millis) {
+        var minutes = Math.floor(millis / 60000);
+        var seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
+    }
     $scope.postdata = function () {
-
+        $scope.getDateTime = new Date().getTime();
         if ($scope.fileArray == undefined || $scope.fileArray.length < 2) {
             toastr.warning('Selecione duas imagens para comparação')
             return
@@ -82,6 +86,8 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
 
         var filesBase64 = []
         var reader = new FileReader();
+        document.getElementById("json").innerHTML = JSON.stringify('Processando', undefined, 2);
+
         for (var i = 0, len = $scope.fileArray.length; i < len; i++) {
             var file = $scope.fileArray[i];
             getFileBuffer(file).then(function (resp) {
@@ -107,10 +113,14 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
 
                 $http(req).then(function (response) {
                     if (response.data) {
-                        //$scope.msg = "match:" + response.data.match + "-" + "score:" + response.data.score
-                        document.getElementById("json").innerHTML = JSON.stringify(response.data, undefined, 2);
-                    }
+                        $scope.totalTime = new Date().getTime() - $scope.getDateTime;
 
+                        var data = {
+                            response: response.data,
+                            duration: formatTiming($scope.totalTime)
+                        }
+                        document.getElementById("json").innerHTML = JSON.stringify(data, undefined, 2);
+                    }
 
                 }).catch(function (response) {
                     /*  console.log("ERROR:", response);
@@ -120,7 +130,6 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
                      $scope.headers = response.headers(); */
 
                     document.getElementById("json").innerHTML = JSON.stringify(response, undefined, 2);
-
                 });
 
             }
