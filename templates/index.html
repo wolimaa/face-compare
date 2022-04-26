@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" href="../static/favicon.ico">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3schools30.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-utf8-base64/0.0.5/angular-utf8-base64.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="../static/component.js"></script>
+</head>
+
+<body ng-app="app">
+    <div class="w3-col l10 m12" id="main">
+        <div class="w3-panel w3-note">
+            <p><strong>Regressão Logística: </strong><code>Thresholding (Limite).</code> Nos podemos converter a
+                probabilidade das predições usando o valor limite (threshold) t. Se a probabilidade de ocorrer uma
+                variável dependente TRUE for maior que o valor limite threshold t, então nos predizemos que existe
+                influencia. Mas se a probabilidade de primeira compra for menor que o valor limite de threshold t então
+                predizemos que não existe influencia.
+
+            <p><a target="_blank"
+                    href="https://developers.google.com/machine-learning/crash-course/classification/thresholding">Classification:
+                    Thresholding</a></p>
+            <p><a target="_blank" href="https://arxiv.org/pdf/1503.03832.pdf">FaceNet: A Unified Embedding for Face
+                    Recognition and Clustering</a></p>
+        </div>
+        <form autocomplete="off" id="w3-exerciseform" action="exercise.asp?filename=exercise_display_visibility1"
+            method="post" target="_blank">
+            <h2>Test Face Compare</h2>
+            <div class="exercisewindow">
+                <h3>Galeria:</h3>
+                <p>Escolha duas imagens para comparação.</p>
+                <div id="preview"></div>
+                <input type="file" select-files-ng ng-model="fileArray" multiple id="file-input"
+                    class="w3-btn w3-margin-bottom">
+
+            </div>
+            <br>
+            <p>
+
+            <div ng-app="postserviceApp" ng-controller="postserviceCtrl">
+                <div>
+                    <input type="button" value="Comparar" ng-click="postdata()" /> <br /><br />
+                </div>
+
+                <div class="w3-code notranslate cssHigh"><span class="cssselectorcolor" style="color:brown">
+                        <div class="w3-padding w3-padding-16 w3-white notranslate">
+                            <span class="cssselectorcolor" style="color:brown">
+                                Resultado <span class="cssselectorcolor" style="color:brown"></span>
+                            </span>
+                            <br>
+                            <textarea id="json" name="story" rows="5" cols="33" style="width: 1228px; height: 441px;"></textarea>
+                        </div>
+                </div>
+
+            </div>
+            </p>
+    </div>
+    </form>
+    </div>
+</body>
+
+</html>
