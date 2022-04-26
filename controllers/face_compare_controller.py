@@ -44,27 +44,9 @@ class ImageResource(Resource):
                 threshold = None
                 result =  self.face_compare_service.handle(data['image_one'], data['image_two'])            
             return jsonify({'match': result.match, 'threshold': result.threshold, 'distance':  float(result.distance) })
-        except Exception:
+        except Exception as e:
             track= get_current_traceback(skip=1, show_hidden_frames=True,
                 ignore_system_exceptions=False)
+            message = str(e)
             track.log()
-            abort(500)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-       
-   
-    
+            abort(500, message)   

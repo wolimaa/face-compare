@@ -103,7 +103,7 @@ angular.module("app", ['ab-base64']).directive("selectFilesNg", function () {
 
                 var req = {
                     method: 'POST',
-                    url: 'http://localhost:5000/face-compare/images',
+                    url: 'http://127.0.0.1:5001/face-compare/images',
                     headers: {
                         'Access-Control-Allow-Origin': '*',
                         'Content-Type': 'application/json',

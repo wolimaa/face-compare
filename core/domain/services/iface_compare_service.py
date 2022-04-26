@@ -1,4 +1,4 @@
-from Interface import implements, Interface
+from interface import implements, Interface
 
 
 class IFaceCompareService(Interface):

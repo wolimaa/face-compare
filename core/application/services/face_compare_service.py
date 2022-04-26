@@ -5,7 +5,7 @@ import base64
 from PIL import Image
 from flask_injector import inject
 from injector import Module, Binder, singleton, Injector
-from Interface import implements, Interface
+from interface import implements, Interface
 from core.domain.models.check_result import CheckResult
 from core.domain.services.iface_compare_service import IFaceCompareService
 from core.utils.images import get_face
