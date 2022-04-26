@@ -4,11 +4,9 @@
 | :---: | :---: |
 
 
-Este é um repositório contém uma implementação do TensorFlow com o um face recognizer descrito no artigo "FaceNet: A Unified Embedding for Face Recognition and Clustering". 
+Este repositório contém uma implementação do TensorFlow com o um face recognizer descrito no artigo "FaceNet: A Unified Embedding for Face Recognition and Clustering". 
 
 ## Executando com docker
-
-The package and any of the example notebooks can be run with docker (or nvidia-docker) using:
 
 ```bash
 docker build -t face_compare:latest .
